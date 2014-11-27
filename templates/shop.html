@@ -1,0 +1,80 @@
+<style>
+
+    #div {
+        position: absolute;
+        width: 350px;
+        height: auto;
+        z-index: 15;
+        top: 30%;
+        left: 50%;
+        margin: -100px 0 0 -150px;
+        background: cornflowerblue;
+
+    }
+    table {
+        border-collapse: collapse;
+    }
+    tr.strikeout td:before {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        border-bottom: 1px solid gray;
+        width: 100%;
+    }
+    td {
+        position: relative;
+        padding: 5px 10px;
+    }
+</style>
+<div id="div">
+    <div align="center">
+            <input style="align-self: center" type="text" ng-model="search">
+            <input type="checkbox" ng-model="strict">
+        <button type="button" class="btn btn-default" ng-click="newAdd()">+</button>
+        <button type="button" class="btn btn-default" ng-click="deleteChecked()">Del</button>
+        <div class="form-group" ng-form="addForm" ng-show='var'>
+
+            <H3>Adaugare produs</H3>
+            <input type="text" name="prodName" id="prodName" placeholder="Nume Produs" ng-model="prod.prodName"
+                   required><br>
+            <input type="text" name="prodDesc" id="prodAman" placeholder="Amanunte" ng-model="prod.prodAman"><br>
+            <button type="button" class="btn btn-default" ng-disabled="addForm.$invalid"
+                    ng-click="addProd(prod.prodName,prod.prodAman)">Adauga
+            </button>
+
+            <div class="error" ng-show="addForm.prodName.$dirty && addForm.prodName.$invalid">
+                <span class="error" style="color:red" ng-show="addForm.prodName.$error.required">Name Required!</span>
+            </div>
+
+
+        </div>
+    </div>
+    <table class="table">
+        <tr >
+           <shop-list></shop-list>
+        </tr>
+
+        <tr  ng-repeat="prod in prodList|filter:search:strict" class={{prod.status}} >
+            <td >
+                <input type="checkbox" ng-model="check" ng-change="checkProd(prod)">
+            </td>
+            <td style="width:150px" ng-show="prod.varEdit">
+                {{prod.prodName}}
+            </td>
+            <td ng-hide="prod.varEdit"><input placeholder="Denumire" style="width:70px;" type="text" ng-model="prod.prodName"></td>
+            <td style="width:140px" ng-show="prod.varEdit">
+                {{prod.prodAman}}
+            </td>
+            <td ng-hide="prod.varEdit"><input placeholder="Amanunte" style="width:70px;"type="text" ng-model="prod.prodAman"></td>
+            <td style="width:60px" ng-show="prod.varEdit">
+                <button type="button" class="btn btn-default" ng-click="editShow(prod)">Edit</button>
+            </td>
+            <td style="width:60px" ng-hide="prod.varEdit">
+                <button type="button" class="btn btn-default" ng-click="editProd(prod,prod.prodName,prod.prodAman)">Save</button>
+            </td>
+        </tr>
+    </table>
+
+
+</div>
