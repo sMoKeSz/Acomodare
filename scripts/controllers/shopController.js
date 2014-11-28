@@ -1,47 +1,53 @@
 /**
  * Created by Iulian.Pelin on 11/26/2014.
  */
-var products = [
-    {
-        prodName: 'Prod1',
-        prodAman: 'desc',
-        status: 1,
-        varEdit : true
 
-    },
-    {
-        prodName: 'Prod2',
-        prodAman: 'desc',
-        status: 1,
-        varEdit : true
-    },
-    {
-        prodName: 'Prod3',
-        prodAman: 'desc',
-        status: 1,
-        varEdit : true
-
-    },
-    {
-        prodName: 'Prod4',
-        prodAman: 'desc',
-        status: 1,
-        varEdit : true
-
-    },
-    {
-        prodName: 'Prod5',
-        prodAman: 'desc',
-        status: 1,
-        varEdit : true
-
-    }
-
-];
 app.controller('shopController', ['$scope', function ($scope) {
+    $scope.products = [
+        {
+            name: 'Prod1',
+            description: 'desc',
+            status: 1,
+            varEdit : true,
+            strike : 0
+
+        },
+        {
+            name: 'Prod2',
+            description: 'desc',
+            status: 1,
+            varEdit : true,
+            strike : 0
+        },
+        {
+            name: 'Prod3',
+            description: 'desc',
+            status: 1,
+            varEdit : true,
+            strike : 0
+
+        },
+        {
+            name: 'Prod4',
+            description: 'desc',
+            status: 1,
+            varEdit : true,
+            strike : 0
+
+        },
+        {
+            name: 'Prod5',
+            description: 'desc',
+            status: 1,
+            varEdit : true,
+            strike : 0
+
+        }
+
+    ];
 
 
-    var strikedProd = [];
+
 
     // <Adaugare>
     $scope.newAdd = function () {
@@ -49,12 +55,12 @@ app.controller('shopController', ['$scope', function ($scope) {
     };
 
     $scope.addProd = function (name, aman) {
-        products.push({
-            prodName: name,
-            prodAman: aman,
+        $scope.products.push({
+            name: name,
+            description: aman,
             status: 1,
             varEdit : true,
-            varEdit1 : false
+            strike : 0
         });
     };
     // </Adaugare>
@@ -63,11 +69,11 @@ app.controller('shopController', ['$scope', function ($scope) {
     $scope.checkProd = function (prod) {
         if (prod.status == 1) {
             prod.status = "strikeout";
-            strikedProd.push(prod);
+            prod.strike = 1;
         }
         else if (prod.status == "strikeout") {
             prod.status = 1;
-            strikedProd.pop();
+            prod.strike = 0;
         }
 
 
@@ -76,11 +82,13 @@ app.controller('shopController', ['$scope', function ($scope) {
 
     //<Stergere Produse Cumparate>
     $scope.deleteChecked = function () {
-        for (var i = 0; i < products.length; i++) {
-            for (var j = 0; j < strikedProd.length; j++) {
-                if (products[i].prodName == strikedProd[j].prodName) products.splice(i, 1);
+        for (var i = 0; i < $scope.products.length; i++) {
 
-            }
+          if ($scope.products[i].strike == 1) {
+              $scope.products.splice(i, 1);
+              i--;
+          }
+
         }
 
     };
@@ -93,33 +101,37 @@ app.controller('shopController', ['$scope', function ($scope) {
 
     $scope.editProd = function(prod,nume,aman){
         prod.varEdit=true;
-        for (var i = 0; i < products.length; i++) {
-            if (prod.prodName == products[i].prodName) {
-                products[i].prodName= nume;
-                products[i].prodAman= aman;
+        for (var i = 0; i < $scope.products.length; i++) {
+            if (prod.name == $scope.products[i].name) {
+                $scope.products[i].name= nume;
+                $scope.products[i].description= aman;
             }
         }
 
     };
     //</Editare Produse>
+    
 
-    //search
-
-
-
-    $scope.prodList = products;
 }]);
 app.directive("shopList", function(){
     return {
         restrict: "E",
-        template:"<h3 style='text-align: center'>Lista cumparaturi</h3>"
+        templateUrl:"templates/element.html"
 
     }
 
 });
-app.filter('customFilter1',function(){
-    return function(element){
-        for(var i=0;i<products.length;i++)
-            if (products[i].prodName === element) return element;
-    }
+//search
+app.filter('startsWith', function () {
+    return function (products, search) {
+        var filtered = [];
+        if(search==null) return products;
+        for (var i = 0; i < products.length; i++) {
+            var item = products[i];
+            if (angular.equals(search,item.name.substring(0, search.length))) {
+                filtered.push(item);
+            }
+        }
+        return filtered;
+    };
 });
