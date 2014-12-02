@@ -2,49 +2,55 @@
  * Created by Iulian.Pelin on 11/26/2014.
  */
 
-app.controller('shopController', ['$scope', function ($scope) {
-    $scope.products = [
-        {
-            name: 'Prod1',
-            description: 'desc',
-            status: 1,
-            varEdit : true,
-            strike : 0
+app.controller('shopController', ['$scope', '$http','$location', function ($scope,$http,$location) {
+    $http({url: 'http://localhost:8080/api/produse/', method: 'GET'})
+        .success(function (data) {
+            $scope.products = data;
+        });
 
-        },
-        {
-            name: 'Prod2',
-            description: 'desc',
-            status: 1,
-            varEdit : true,
-            strike : 0
-        },
-        {
-            name: 'Prod3',
-            description: 'desc',
-            status: 1,
-            varEdit : true,
-            strike : 0
 
-        },
-        {
-            name: 'Prod4',
-            description: 'desc',
-            status: 1,
-            varEdit : true,
-            strike : 0
-
-        },
-        {
-            name: 'Prod5',
-            description: 'desc',
-            status: 1,
-            varEdit : true,
-            strike : 0
-
-        }
-
-    ];
+    //$scope.products = [
+    //    {
+    //        name: 'Prod1',
+    //        description: 'desc',
+    //        status: 1,
+    //        varEdit : true,
+    //        strike : 0
+    //
+    //    },
+    //    {
+    //        name: 'Prod2',
+    //        description: 'desc',
+    //        status: 1,
+    //        varEdit : true,
+    //        strike : 0
+    //    },
+    //    {
+    //        name: 'Prod3',
+    //        description: 'desc',
+    //        status: 1,
+    //        varEdit : true,
+    //        strike : 0
+    //
+    //    },
+    //    {
+    //        name: 'Prod4',
+    //        description: 'desc',
+    //        status: 1,
+    //        varEdit : true,
+    //        strike : 0
+    //
+    //    },
+    //    {
+    //        name: 'Prod5',
+    //        description: 'desc',
+    //        status: 1,
+    //        varEdit : true,
+    //        strike : 0
+    //
+    //    }
+    //
+    //];
 
 
 
@@ -55,13 +61,13 @@ app.controller('shopController', ['$scope', function ($scope) {
     };
 
     $scope.addProd = function (name, aman) {
-        $scope.products.push({
-            name: name,
-            description: aman,
-            status: 1,
-            varEdit : true,
-            strike : 0
-        });
+        $http({url: 'http://localhost:8080/api/produse', method: 'POST',data:{name:name,description:aman}})
+            .success(function () {
+                $http({url: 'http://localhost:8080/api/produse/', method: 'GET'})
+                    .success(function (data) {
+                        $scope.products = data;
+                    });
+            });
     };
     // </Adaugare>
 
@@ -83,15 +89,19 @@ app.controller('shopController', ['$scope', function ($scope) {
     //<Stergere Produse Cumparate>
     $scope.deleteChecked = function () {
         for (var i = 0; i < $scope.products.length; i++) {
+            console.log($scope.products.length);
+            if ($scope.products[i].strike == 1) {
+                $http({url: 'http://localhost:8080/api/produs/' + $scope.products[i]._id, method: 'DELETE'})
+                    .success(function () {
+                        $http({url: 'http://localhost:8080/api/produse/', method: 'GET'})
+                            .success(function (data) {
+                                $scope.products = data;
+                            });
+                    });
 
-          if ($scope.products[i].strike == 1) {
-              $scope.products.splice(i, 1);
-              i--;
-          }
-
+            }
         }
-
-    };
+    }
     //</Stergere Produse Cumparate>
 
     //<Editare Produse>
@@ -100,12 +110,20 @@ app.controller('shopController', ['$scope', function ($scope) {
     };
 
     $scope.editProd = function(prod,nume,aman){
+
         prod.varEdit=true;
         for (var i = 0; i < $scope.products.length; i++) {
             if (prod.name == $scope.products[i].name) {
-                $scope.products[i].name= nume;
-                $scope.products[i].description= aman;
+                $http({
+                    url: 'http://localhost:8080/api/produs/' + $scope.products[i]._id,
+                    method: 'PUT',
+                    data: {name: nume, description: aman}
+                }).
+                    success(function () {
+
+                    });
             }
+
         }
 
     };
