@@ -62,11 +62,8 @@ app.controller('shopController', ['$scope', '$http','$location', function ($scop
 
     $scope.addProd = function (name, aman) {
         $http({url: 'http://localhost:8080/api/produse', method: 'POST',data:{name:name,description:aman}})
-            .success(function () {
-                $http({url: 'http://localhost:8080/api/produse/', method: 'GET'})
-                    .success(function (data) {
-                        $scope.products = data;
-                    });
+            .success(function (data) {
+                $scope.products=data;
             });
     };
     // </Adaugare>
@@ -92,11 +89,8 @@ app.controller('shopController', ['$scope', '$http','$location', function ($scop
             console.log($scope.products.length);
             if ($scope.products[i].strike == 1) {
                 $http({url: 'http://localhost:8080/api/produs/' + $scope.products[i]._id, method: 'DELETE'})
-                    .success(function () {
-                        $http({url: 'http://localhost:8080/api/produse/', method: 'GET'})
-                            .success(function (data) {
-                                $scope.products = data;
-                            });
+                    .success(function (data) {
+                            $scope.products=data;
                     });
 
             }
@@ -119,8 +113,8 @@ app.controller('shopController', ['$scope', '$http','$location', function ($scop
                     method: 'PUT',
                     data: {name: nume, description: aman}
                 }).
-                    success(function () {
-
+                    success(function (data) {
+                        $scope.products=data;
                     });
             }
 

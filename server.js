@@ -33,7 +33,12 @@ router.route('/produse')
             if (err)
                 res.send(err);
 
-           res.json({ message: 'Produs adaugat!' });
+            Produs.find(function(err, produse) {
+                if (err)
+                    res.send(err);
+
+                res.json(produse);
+            })
         });
 
     })
@@ -70,7 +75,12 @@ router.route('/produs/:produs_id')
                 if (err)
                     res.send(err);
 
-                res.json({ message: 'Update!' });
+                Produs.find(function(err, produse) {
+                    if (err)
+                        res.send(err);
+
+                    res.json(produse);
+                });
             });
 
         });
@@ -82,7 +92,12 @@ router.route('/produs/:produs_id')
             if (err)
                 res.send(err);
 
-            res.json({ message: 'Produs sters' });
+            Produs.find(function(err, produse) {
+                if (err)
+                    res.send(err);
+
+                res.json(produse);
+            });
         });
     });
 app.use('/api', router);
