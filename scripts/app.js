@@ -6,11 +6,12 @@ var app = angular.module('app', ['ngRoute', 'ngResource']);
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider
-
-            .otherwise({
-                templateUrl: 'templates/shop.html',
+            .when('/shop',{
+                templateUrl:'templates/shop.html',
                 controller: 'shopController'
             })
-
+            .otherwise({
+                redirectTo : '/shop'
+            })
 
     }]);

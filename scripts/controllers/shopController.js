@@ -8,7 +8,7 @@ app.controller('shopController', ['$scope', '$http','$location', function ($scop
             $scope.products = data;
         });
 
-
+    $scope.color="background: cornflowerblue"
     //$scope.products = [
     //    {
     //        name: 'Prod1',
@@ -51,7 +51,19 @@ app.controller('shopController', ['$scope', '$http','$location', function ($scop
     //    }
     //
     //];
+    //
 
+
+    //culori
+    $scope.colorBlack = function(){
+        $scope.color="background: black";
+    }
+    $scope.colorRed = function(){
+        $scope.color="background: darkred";
+    }
+    $scope.colorBlue = function(){
+        $scope.color="background: cornflowerblue";
+    }
 
 
 

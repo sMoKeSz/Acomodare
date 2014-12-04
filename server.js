@@ -103,7 +103,7 @@ router.route('/produs/:produs_id')
 app.use('/api', router);
 
 app.listen(port);
-
+console.log("Server On!")
 
 
 
